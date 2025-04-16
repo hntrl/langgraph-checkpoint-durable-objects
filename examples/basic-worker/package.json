@@ -1,0 +1,21 @@
+{
+	"name": "basic-worker",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@langchain/langgraph": "^0.2.64",
+		"checkpoint-durable-object": "workspace:*",
+		"hono": "^4.7.7"
+	},
+	"devDependencies": {
+		"@types/node": "^22.14.1",
+		"typescript": "^5.5.2",
+		"wrangler": "^4.11.1"
+	}
+}
