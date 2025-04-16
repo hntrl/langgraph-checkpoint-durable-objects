@@ -1,0 +1,13 @@
+{
+  "name": "root",
+  "private": true,
+  "packageManager": "pnpm@10.4.0",
+  "scripts": {
+    "build": "pnpm run --filter=\"./packages/[^_]**\" build",
+    "watch": "pnpm build && pnpm run --filter=\"./packages/[^_]**\" --parallel build --watch",
+    "clean": "git clean -fdX .",
+    "clean:build": "git clean -fdx -e node_modules .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  }
+}
