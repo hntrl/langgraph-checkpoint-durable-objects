@@ -52,9 +52,12 @@ const validCheckpointMetadataKeys = validateKeys<
 /**
  * DurableThreadObject is the actual object that holds state.
  *
- * Note that the DurableThreadObject doesn't have parity with the BaseCheckpointSaver. Because of the way that serialization/RPC works,
- * the workers runtime is very selective about what can be passed between compute contexts. We'll handle all the serialization/conformance
- * in the target that interacts with the thread object. Many of the methods are the same naming wise for simplicity's sake.
+ * Note that the DurableThreadObject doesn't have parity with the
+ * BaseCheckpointSaver. Because of the way that serialization/RPC works, the
+ * workers runtime is very selective about what can be passed between compute
+ * contexts. We'll handle all the serialization/conformance in the target that
+ * interacts with the thread object. Many of the methods are the same naming
+ * wise for simplicity's sake.
  */
 export class DurableThreadObject<Env = unknown> extends DurableObject<Env> {
   private sql: SqlStorage;
@@ -220,6 +223,11 @@ export class DurableThreadObject<Env = unknown> extends DurableObject<Env> {
   }
 }
 
+/**
+ * This is a super simple durable object that just keeps track of all the
+ * threads that have been created. It's used to coordinate between the durable
+ * thread objects for `list()` in the checkpointer.
+ */
 export class DurableGraphObject<Env = unknown> extends DurableObject<Env> {
   threads: string[] = [];
 
@@ -243,6 +251,12 @@ export class DurableGraphObject<Env = unknown> extends DurableObject<Env> {
   }
 }
 
+/**
+ * This is the main checkpointer class. It's a simple wrapper around the
+ * `BaseCheckpointSaver` that saves its state in an array of durable objects.
+ * It's responsible for coordinating between threads and saving/loading
+ * checkpoint data.
+ */
 export class DurableObjectSaver<Env = unknown> extends BaseCheckpointSaver {
   constructor(
     protected threadNamespace: DurableObjectNamespace<DurableThreadObject<Env>>,
