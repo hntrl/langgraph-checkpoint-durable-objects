@@ -24,13 +24,12 @@ const node2 = async (state: typeof StateAnnotation.State) => {
 const app = new Hono<{ Bindings: Env }>();
 
 app.get("*", async (c) => {
-  const saver = new DurableObjectSaver(
-    c.env.LANGCHAIN_THREADS,
-    () =>
-      c.env.LANGCHAIN_THREADS.get(
-        c.env.LANGCHAIN_THREADS.idFromName("agent1")
-      ) as any
-  );
+  const saver = new DurableObjectSaver(c.env.LANGCHAIN_THREADS, () => {
+    const namespace = c.env.LANGCHAIN_THREADS;
+    const id = namespace.idFromName("agent1");
+    return namespace.get(id) as any;
+  });
+
   const builder = new StateGraph(StateAnnotation)
     .addNode("node1", node1)
     .addNode("node2", node2)
